@@ -1,0 +1,38 @@
+import { Delete, Edit } from "@mui/icons-material";
+import { Button, Card, CardContent, Grid, IconButton, List, ListItem, ListItemText, Stack, Typography } from "@mui/material";
+
+const BlogList = ({ addNewBlog, blogs, selectedBlogId, editBlog, deleteBlog }) => (
+    <Grid width={"30%"}>
+        <Card variant="outlined">
+            <CardContent>
+            <Stack direction="row" justifyContent="space-between" mb={2} >
+                <Typography variant="h6">Blogs</Typography>
+                <Button size="small" onClick={addNewBlog}> + New </Button>
+            </Stack>
+
+            <List>
+                {blogs.map((blog) => (
+                <ListItem
+                    style={{ backgroundColor: blog.id === selectedBlogId ? "lightgray" : "transparent", cursor: "pointer" }}  
+                    key={blog.id}
+                    secondaryAction={
+                        <Stack direction="row">
+                            <IconButton onClick={() => editBlog(blog)} > <Edit fontSize="small" /> </IconButton>
+                            <IconButton color="error" onClick={() => deleteBlog(blog.id)} >
+                                <Delete fontSize="small" />
+                            </IconButton>
+                        </Stack>
+                    }
+                >
+                    <ListItemText primary={blog.title.length > 30 ? blog.title.substring(0, 30) + " ..." : blog.title} 
+                    />
+                </ListItem>
+                ))}
+            </List>
+            </CardContent>
+        </Card>
+    </Grid>
+)
+
+
+export default BlogList;
