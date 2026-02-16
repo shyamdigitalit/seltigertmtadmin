@@ -17,14 +17,14 @@ const portDetails = {
 module.exports = {
   apps: [
     {
-      name: apiName[appenv] || "notify-qas-api",
+      name: apiName[appenv] || "seltigerlanding-qas-api",
 
       // ✅ Use local tsx binary
       script: "./node_modules/.bin/tsx",
       args: "index.js",
 
       env: {
-        PORT: portDetails[appenv] || 3042,
+        PORT: portDetails[appenv] || 3006,
         NODE_ENV: apienv,
         APP_ENV: appenv,
       },

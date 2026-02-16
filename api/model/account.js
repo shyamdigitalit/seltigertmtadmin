@@ -9,7 +9,7 @@ const accountSchema = new mongoose.Schema(
         employeeCode: { type: String, trim: true },
         location: { type: String, trim: true },
         anniversaryDate: { type: Date },
-        status: { type: Boolean,  default: true }
+        status: { type: String, required: true, enum: ['Active', 'Inactive'], default: 'Active' },
     },
     { timestamps: true  }
 );

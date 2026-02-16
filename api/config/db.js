@@ -7,8 +7,8 @@ const appenv = process.env.APP_ENV || 'quality';
 const env = process.env.NODE_ENV || 'dev';
 
 const dbUrl = appenv === 'production'
-    ? (env === 'live' ? (console.log('Live (Production Server)'), `${dbUrlConn}seltigerprddb?appName=seltigerapp`) : (console.log('Dev (Production Server)'), `${dbUrlConn}seltigerdb?appName=seltigerapp`))
-    : (env === 'live' ? (console.log('Live (Quality Server)'), `${dbUrlConn}seltigerqasdb?appName=seltigerapp`) : (console.log('Dev (Quality Server)'), `${dbUrlConn}seltigerdb?appName=seltigerapp`));
+    ? (env === 'live' ? (console.log('Live (Production Server)'), `${dbUrlConn}seltigerprddb`) : (console.log('Dev (Production Server)'), `${dbUrlConn}seltigerdb`))
+    : (env === 'live' ? (console.log('Live (Quality Server)'), `${dbUrlConn}seltigerqasdb`) : (console.log('Dev (Quality Server)'), `${dbUrlConn}seltigerdb`));
 
 mongoose.set('strictQuery', false); // Disable strict query mode
 
@@ -16,9 +16,11 @@ mongoose.set('strictQuery', false); // Disable strict query mode
 const connectDB = async () => {
     try {
         await mongoose.connect(dbUrl, {
+            appName: 'seltigerapp',
+            authSource: 'admin',
             retryWrites: true,
             w: 'majority',
-            ssl: true,
+            ssl: false,
             maxPoolSize: 1, // Keep per-worker connections low
             minPoolSize: 1
         });

@@ -5,13 +5,17 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import usersRouter from './router/users.js';
 import connectDB from './config/db.js';
+// import { setupJobs } from './utilities/jobscheduler/jobScheduler.js';
+import usersRouter from './router/users.js';
+import leadRouter from './router/lead.js';
 import activityRouter from './router/activity.js';
 import accountRouter from './router/account.js';
 import eventRouter from './router/event.js';
 import birthdayRouter from './router/birthday.js';
-import { setupJobs } from './utilities/jobscheduler/jobScheduler.js';
+import subcategoryRouter from './router/masters/subcategory.js';
+import productRouter from './router/masters/product.js';
+import stateRouter from './router/masters/state.js';
 import settingRouter from './router/setting.js';
 dotenv.config();
 
@@ -25,8 +29,8 @@ const allowedOrigins = {
         production: ['http://localhost:3041']
     },
     live: {
-        quality: ['https://notify-qas.shyamgroup.com'],
-        production: ['https://notify.shyamgroup.com']
+        quality: ['https://seltigerlanding-qas.shyamgroup.com'],
+        production: ['https://seltigerlanding.shyamgroup.com']
     }
 };
 const portDetails = {
@@ -69,10 +73,14 @@ app.use(bodyParser.urlencoded({ limit: '10000mb', extended: true }));
 // app.use(express.static('uploads'));
 
 app.use("/api/users", usersRouter)
+app.use("/api/lead", leadRouter)
 app.use("/api/activity", activityRouter)
 app.use("/api/account", accountRouter)
 app.use("/api/event", eventRouter)
 app.use("/api/birthday", birthdayRouter)
+app.use("/api/subcategory", subcategoryRouter)
+app.use("/api/product", productRouter)
+app.use("/api/state", stateRouter)
 app.use("/api/settings", settingRouter)
 
 // static frontend delivery
