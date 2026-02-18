@@ -20,7 +20,7 @@ const connectDB = async () => {
             authSource: 'admin',
             retryWrites: true,
             w: 'majority',
-            ssl: false,
+            ssl: true,
             maxPoolSize: 1, // Keep per-worker connections low
             minPoolSize: 1
         });
