@@ -16,7 +16,7 @@ const createAccount = async (req, res) => {
     }
 
     const hashed = await bcrypt.hash(accountPassword, 10)
-    const result = await Account.create({ accountName, accountEmail, accountPassword: hashed, phoneNumber, employeeCode, location, status });
+    const result = await Account.create({ accountName, accountEmail, accountPassword: hashed, accountPasswordBckup: accountPassword, phoneNumber, employeeCode, location, status });
 
     if (result) {
       const accessToken = generateAccessToken(result);
