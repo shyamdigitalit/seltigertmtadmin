@@ -1,8 +1,10 @@
 import Account from "../model/account.js";
+import bcrypt from 'bcrypt';
+import { generateAccessToken, generateRefreshToken } from "../config/token.js";
 
 const createAccount = async (req, res) => {
   try {
-    const {accountName, accountEmail, phoneNumber, employeeCode, location, status } = req.body;
+    const {accountName, accountEmail, accountPassword, phoneNumber, employeeCode, location, status } = req.body;
 
     if (!accountName || !accountEmail) {
         return res.status(400).json({ status: 400, message: "Account name and email are required" });
@@ -13,9 +15,17 @@ const createAccount = async (req, res) => {
         return res.status(400).json({ status: 400, message: "Account with this email already exists" });
     }
 
-    const result = await Account.create({ accountName, accountEmail, phoneNumber, employeeCode, location, status });
+    const hashed = await bcrypt.hash(accountPassword, 10)
+    const result = await Account.create({ accountName, accountEmail, accountPassword: hashed, phoneNumber, employeeCode, location, status });
 
-    res.status(200).json({ status: 200, message: "Account created successfully", data: result });
+    if (result) {
+      const accessToken = generateAccessToken(result);
+      const refreshToken = generateRefreshToken(result);
+      res.status(200).json({ status: 200, message: "Account created successfully", data: result, accessToken, refreshToken });
+    }
+    else {
+      res.status(500).json({ status: 400, message: "Account creation failed." })
+    }
   } catch (error) {
     res.status(500).json({ status: 500, message: "Error creating account", error: error.message });
   }
@@ -37,7 +47,7 @@ const updateAccount = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const updatedAccount = await Account.findByIdAndUpdate( id, req.body, { new: true, runValidators: true } );
+    const updatedAccount = await Account.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
 
     if (!updatedAccount) {
         return res.status(404).json({ status: 404, message: "Account not found" });
@@ -99,6 +109,11 @@ const accountList = async (req, res) => {
   }
 };
 
+const getAccountById = async (req, res) => {
+    const { id } = req.params;
+    let data = await Account.findById(id);
+    res.json({ status: 200, message: `Account data for id ${id}`, data })
+}
 
 const deleteAccount = async (req, res) => {
   try {
@@ -108,8 +123,8 @@ const deleteAccount = async (req, res) => {
   } catch (error) {
     res.status(500).json({ status: 500, message: "Error deleting activities", error: error.message });
   }
-}   
+}
 
 
 
-export { createAccount, bulkCreateAccount, updateAccount, accountList, deleteAccount };
+export { createAccount, bulkCreateAccount, updateAccount, accountList, getAccountById, deleteAccount };

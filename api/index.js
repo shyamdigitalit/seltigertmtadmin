@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
+import authRouter from './router/auth.js';
 import accountRouter from './router/account.js';
 import leadRouter from './router/lead.js';
 import subcategoryRouter from './router/masters/subcategory.js';
@@ -67,6 +68,7 @@ app.use(bodyParser.json({ limit: '10000mb' }));
 app.use(bodyParser.urlencoded({ limit: '10000mb', extended: true }));
 // app.use(express.static('uploads'));
 
+app.use("/api/auth", authRouter)
 app.use("/api/account", accountRouter)
 app.use("/api/lead", leadRouter)
 app.use("/api/subcategory", subcategoryRouter)
