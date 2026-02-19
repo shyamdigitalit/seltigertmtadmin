@@ -17,7 +17,7 @@ export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI
     }
 });
 
-export const checkAuth = createAsyncThunk('auth/checkAuth', async (_, thunkAPI) => {
+export const checkAuth = createAsyncThunk('auth/refresh-token', async (_, thunkAPI) => {
     try {
         const data = await axiosInstance.get('/auth/session').then(res => res.data);
         return data;

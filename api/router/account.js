@@ -5,7 +5,7 @@ import authMiddleware from "../middleware/auth.js";
 const accountRouter = express.Router();
 
 accountRouter.get("/", authMiddleware, accountList);
-accountRouter.post("/", authMiddleware, createAccount);
+accountRouter.post("/", createAccount);
 accountRouter.post("/bulk", authMiddleware, bulkCreateAccount);
 accountRouter.patch("/:id", authMiddleware, updateAccount);
 accountRouter.put("/delete", authMiddleware, deleteAccount);

@@ -11,7 +11,7 @@
     background-size: cover;
 }
 .login-container {
-    padding: 120px;
+    padding: 80px;
     /* height: 100%; */
     display: grid;
     grid-template-columns: 1fr 3fr 3fr 1fr; 

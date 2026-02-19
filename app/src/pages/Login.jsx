@@ -11,7 +11,7 @@ import { showSnackbar } from '../redux/slices/snackbar';
 const Login = () => {
   const dispatch = useDispatch();
   const { loading } = useSelector(state => state.auth);
-  const [credentials, setCredentials] = useState({ acc_uname: '', acc_pass: '' });
+  const [credentials, setCredentials] = useState({ accountEmail: '', accountPassword: '' });
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ const Login = () => {
       const result = await dispatch(login(credentials));
       if (result.meta.requestStatus === 'fulfilled') {
         dispatch(showSnackbar({ message: "Logged In Successfully", severity: 'success', }));
-        navigate('/home');
+        navigate('/');
       }else {
         dispatch(showSnackbar({ message: result.payload, severity: 'error', }));
       }
@@ -51,8 +51,8 @@ const Login = () => {
         <img src="./shyamlogo.png" width={100} alt=""/>
         <h1 className="login-title">Authentication</h1>
         <TextField className="text-field" label="Email Id / Username" variant="filled" fullWidth
-          name="acc_uname"
-          value={credentials.acc_uname}
+          name="accountEmail"
+          value={credentials.accountEmail}
           onChange={handlechange}
         />
 
@@ -65,8 +65,8 @@ const Login = () => {
               </div>
             ),
           }}
-          name="acc_pass"
-          value={credentials.acc_pass}
+          name="accountPassword"
+          value={credentials.accountPassword}
           onChange={handlechange}
         />
 

@@ -28,8 +28,8 @@ const router = createBrowserRouter([
     element: <Layout />, // ⬅️ Common layout with Navbar/Header
     errorElement: <div>404! Page not found</div>,
     children: [
-      { index: true, element: <Blog /> },
       { path: '/login', element: <Login /> },
+      { index: "/", element: <ProtectedRoute><Blog /></ProtectedRoute> },
       // { path: '/home', element: <Home /> },
       { path: '/account', children: [
         { index: true, element: <Navigate to="type" replace /> },
