@@ -6,13 +6,8 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
-// import { setupJobs } from './utilities/jobscheduler/jobScheduler.js';
-import usersRouter from './router/users.js';
-import leadRouter from './router/lead.js';
-import activityRouter from './router/activity.js';
 import accountRouter from './router/account.js';
-import eventRouter from './router/event.js';
-import birthdayRouter from './router/birthday.js';
+import leadRouter from './router/lead.js';
 import subcategoryRouter from './router/masters/subcategory.js';
 import productRouter from './router/masters/product.js';
 import stateRouter from './router/masters/state.js';
@@ -25,12 +20,12 @@ const __dirname = path.dirname(__filename);
 
 const allowedOrigins = {
     dev: {
-        quality: ['http://localhost:3042'],
-        production: ['http://localhost:3041']
+        quality: ['http://localhost:3047'],
+        production: ['http://localhost:3046']
     },
     live: {
-        quality: ['https://seltigerlanding-qas.shyamgroup.com'],
-        production: ['https://seltigerlanding.shyamgroup.com']
+        quality: ['https://seltigertmtadmin-qas.shyamgroup.com'],
+        production: ['https://seltigertmtadmin.shyamgroup.com']
     }
 };
 const portDetails = {
@@ -72,12 +67,8 @@ app.use(bodyParser.json({ limit: '10000mb' }));
 app.use(bodyParser.urlencoded({ limit: '10000mb', extended: true }));
 // app.use(express.static('uploads'));
 
-app.use("/api/users", usersRouter)
-app.use("/api/lead", leadRouter)
-app.use("/api/activity", activityRouter)
 app.use("/api/account", accountRouter)
-app.use("/api/event", eventRouter)
-app.use("/api/birthday", birthdayRouter)
+app.use("/api/lead", leadRouter)
 app.use("/api/subcategory", subcategoryRouter)
 app.use("/api/product", productRouter)
 app.use("/api/state", stateRouter)
@@ -95,15 +86,6 @@ if (apienv === 'live') {
         res.sendFile(path.join(distPath, 'index.html'));
     });
 }
-
-// Agenda Scheduler setup
-// start agenda AFTER job is defined
-// await setupJobs();
-// process.on("SIGTERM", async () => {
-//     if (agenda) await agenda.stop();
-//     process.exit(0);
-// });
-
 
 
 // No host param → cluster shares the TCP handle
