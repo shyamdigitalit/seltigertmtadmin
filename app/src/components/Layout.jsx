@@ -39,7 +39,7 @@ export default function MiniDrawer() {
     // console.log(result);
     if (result.meta.requestStatus === 'fulfilled') {
       dispatch(showSnackbar({ message: "Logged Out Successfully", severity: 'info', }));
-      navigate('/');
+      navigate('/login');
     }
   }
 
@@ -63,14 +63,13 @@ export default function MiniDrawer() {
   const handleDrawerClose = () => {
     setOpen(false);
     setOpenMenu({});
-  };
-  
+  };  
 
   return (
     <Box>
       {/* <CssBaseline /> */}
       {isAuthenticated && <>
-        <Suspense fallback={<Loader />}> <Header /> </Suspense>
+        <Suspense fallback={<Loader />}> <Header onLogout={handleLogout} /> </Suspense>
         {/* <div style={{ position: "fixed", left: 0, top: 0, width: "100%", zIndex: 100 }} >
         </div> */}
         

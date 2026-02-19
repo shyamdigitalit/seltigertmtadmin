@@ -49,7 +49,7 @@ export const setupInterceptors = (store) => {
         async (error) => {
             const originalRequest = error.config;
 
-            if (originalRequest.url?.includes('/auth/refresh')) {
+            if (originalRequest.url?.includes('/auth/refresh-token')) {
                 return Promise.reject(error);
             }
 
@@ -64,7 +64,7 @@ export const setupInterceptors = (store) => {
                 originalRequest._retry = true;
 
                 try {
-                    const res = await axiosInstance.post('/auth/refresh');
+                    const res = await axiosInstance.post('/auth/refresh-token');
                     const newToken = res.data.accessToken;
 
                     // 🔹 Update Redux store only

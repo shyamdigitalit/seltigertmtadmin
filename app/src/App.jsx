@@ -1,20 +1,10 @@
-import { useEffect } from 'react';
 import Router from './routes/Router';
 import './App.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { checkAuth } from './redux/slices/authSlice';
+import { useSelector } from 'react-redux';
 
 const App = () => {
-  const dispatch = useDispatch();
-  const { loading } = useSelector(state => state.auth);
-
-  useEffect(() => {
-    dispatch(checkAuth());
-  }, [dispatch]);
-
-  // if (loading) return <div className="loader-css">
-  //       <img src="./loader.svg" width={200}  alt="" />
-  //     </div>;
+  const { loading, user } = useSelector(state => state.auth);
+  console.log(user);
 
   if (!loading) return <Router />;
 };
