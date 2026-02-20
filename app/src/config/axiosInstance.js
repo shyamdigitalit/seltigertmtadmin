@@ -29,13 +29,22 @@ export const setupInterceptors = (store) => {
             config.headers['Accept'] = 'application/json';
             config.headers['X-Requested-With'] = 'X';
 
-            if (config.url?.startsWith('/auth')) {
-                const { accessToken } = store.getState().auth; // 🔹 Get from Redux
-                if (accessToken) {
-                    config.headers['Authorization'] = `Bearer ${accessToken}`;
-                }
+            // 1. Check if the URL is an auth-related setup call (login/refresh)
+            // Adjust this list to match exactly which endpoints need Basic Auth
+            const isAuthEndpoint = config.url?.startsWith('/auth/login') || config.url?.startsWith('/auth/refresh-token');
+
+            if (isAuthEndpoint) {
+                // Use Basic Auth for login or refreshing the token
+                config.headers['authorization'] = basicAuthHeader;
             } else {
-                config.headers['Authorization'] = basicAuthHeader;
+                // 2. FOR EVERYTHING ELSE (like /blog), use the Bearer Token
+                const accessToken = store.getState().auth.user?.token; 
+                if (accessToken) {
+                    config.headers['authorization'] = `Bearer ${accessToken}`;
+                } else {
+                    // Optional: Fallback to Basic if no token exists yet
+                    config.headers['authorization'] = basicAuthHeader;
+                }
             }
 
             return config;
@@ -65,13 +74,13 @@ export const setupInterceptors = (store) => {
 
                 try {
                     const res = await axiosInstance.post('/auth/refresh-token');
-                    const newToken = res.data.accessToken;
+                    const newToken = res.data;
 
                     // 🔹 Update Redux store only
                     store.dispatch({ type: 'auth/setAccessToken', payload: newToken });
 
                     // Retry original request with new token
-                    originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
+                    originalRequest.headers['authorization'] = `Bearer ${newToken}`;
                     return axiosInstance(originalRequest);
                 } catch (refreshErr) {
                     store.dispatch({ type: 'auth/logout' });

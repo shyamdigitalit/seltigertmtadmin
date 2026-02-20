@@ -38,7 +38,7 @@ const Blog = () => {
 
     try {
       const response = await axiosInstance.get("/blogs")
-      console.log(response);
+      // console.log(response.data);
        
     } catch (error) {
       

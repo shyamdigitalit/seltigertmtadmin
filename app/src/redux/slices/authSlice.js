@@ -28,7 +28,7 @@ const authSlice = createSlice({
     initialState: initvl,
     reducers: {
         setAccessToken: (state, action) => {
-            state.user = { ...state.user, token: action.payload };
+            state.user = { ...state.user, token: action.payload.data };
             state.isAuthenticated = true;
         }
     },
@@ -41,7 +41,8 @@ const authSlice = createSlice({
         .addCase(login.fulfilled, (state, action) => {
             state.loading = false;
             state.isAuthenticated = true;
-            state.user = action.payload.account
+            // console.log(action.payload);
+            state.user = action.payload.data.account
         })
         .addCase(login.rejected, (state, action) => {
             state.loading = false;

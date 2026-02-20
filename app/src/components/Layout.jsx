@@ -6,6 +6,7 @@ import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import { Outlet } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { persistor } from '../redux/store';
 import { logout } from "../redux/slices/authSlice"
 import { Logout } from '@mui/icons-material';
 import { Avatar } from '@mui/material';
@@ -38,6 +39,7 @@ export default function MiniDrawer() {
     const result = await dispatch(logout());
     // console.log(result);
     if (result.meta.requestStatus === 'fulfilled') {
+      persistor.purge()
       dispatch(showSnackbar({ message: "Logged Out Successfully", severity: 'info', }));
       navigate('/login');
     }

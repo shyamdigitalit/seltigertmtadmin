@@ -26,12 +26,14 @@ const loginAccount = async (req, res) => {
         secure: process.env.NODE_ENV === 'live',
         maxAge: 7 * 24 * 60 * 60 * 1000,
       })
-      .json({ status: 200, account: {
-        _id: response._id,
-        accountName: response.accountName,
-        accountEmail: response.accountEmail,
+      .json({ status: 200, data: {
+        account: {
+          _id: response._id,
+          accountName: response.accountName,
+          accountEmail: response.accountEmail
+        },
         accessToken
-      }});
+      } });
     }
     else res.status(500).json({ status: 500, message: "Incorrect Email or Password" })
   }catch (error) {
@@ -61,7 +63,7 @@ const refreshToken = async (req, res) => {
 
     const account = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
     const accessToken = generateAccessToken(account)
-    return res.status(200).json({ status: 200, accessToken, });
+    return res.status(200).json({ status: 200, data: accessToken });
 
   } catch (error) {
     if (error.name === "TokenExpiredError") {
