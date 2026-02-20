@@ -17,15 +17,6 @@ export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI
     }
 });
 
-// export const checkAuth = createAsyncThunk('auth/session', async (_, thunkAPI) => {
-//     try {
-//         const data = await axiosInstance.get('/auth/session').then(res => res.data);
-//         return data;
-//     } catch (err) {
-//         return thunkAPI.rejectWithValue(err.response?.data?.message || 'Not authenticated');
-//     }
-// });
-
 export const logout = createAsyncThunk('auth/logout', async () => {
     const data = await axiosInstance.post('/auth/logout').then(res => res.data);
     return data;
@@ -50,28 +41,12 @@ const authSlice = createSlice({
         .addCase(login.fulfilled, (state, action) => {
             state.loading = false;
             state.isAuthenticated = true;
-            state.user = action.payload.data
-
+            state.user = action.payload.account
         })
         .addCase(login.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload;
         })
-        // .addCase(checkAuth.pending, (state) => {
-        //     state.loading = true;
-        // })
-        // .addCase(checkAuth.fulfilled, (state, action) => {
-        //     state.loading = false;
-        //     state.isAuthenticated = true;
-        //     console.log(action.payload);
-        //     state.user = action.payload.data;
-
-        // })
-        // .addCase(checkAuth.rejected, (state) => {
-        //     state.loading = false;
-        //     state.isAuthenticated = false;
-        //     state.user = null;
-        // })
         .addCase(logout.fulfilled, (state) => {
             state.isAuthenticated = false;
             state.user = null;

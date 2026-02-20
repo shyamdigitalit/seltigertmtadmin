@@ -29,8 +29,9 @@ const loginAccount = async (req, res) => {
       .json({ status: 200, account: {
         _id: response._id,
         accountName: response.accountName,
-        accountEmail: response.accountEmail,   
-      }, accessToken });
+        accountEmail: response.accountEmail,
+        accessToken
+      }});
     }
     else res.status(500).json({ status: 500, message: "Incorrect Email or Password" })
   }catch (error) {
