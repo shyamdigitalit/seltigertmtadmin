@@ -74,7 +74,7 @@ export default function MiniDrawer() {
         </div> */}
         
       </>}
-      <div style={isAuthenticated ? { marginTop: "5rem", flexGrow: 1, overflowX: "auto" } : {width: "100%"}} >
+      <div style={isAuthenticated ? { marginTop: "0", flexGrow: 1, overflowX: "auto" } : {width: "100%"}} >
         <Outlet /> 
       </div>
     </Box>

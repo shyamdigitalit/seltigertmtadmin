@@ -6,6 +6,7 @@ import AddBlockButton from "./add-block-buttons";
 import ActiveBlockEditor from "./active-block-editor";
 import BlockPreview from "./block-preview";
 import BlogList from "./blog-list";
+import axiosInstance from "../../config/axiosInstance";
 
 const defaultValues = {
   title: "",
@@ -28,6 +29,22 @@ const Blog = () => {
   const { control, handleSubmit, reset, watch } = useForm({
     defaultValues,
   });
+
+  React.useEffect(() => {
+    getBlogList();
+  }, []);
+
+  const getBlogList = async () => {
+
+    try {
+      const response = await axiosInstance.get("/blogs")
+      console.log(response);
+       
+    } catch (error) {
+      
+    }
+
+  }
 
   /* ---------------- BLOG CRUD ---------------- */
 
