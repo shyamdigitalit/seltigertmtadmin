@@ -1,6 +1,6 @@
 import Blog from "../../model/admin/blog.js";
 import { idValidator } from "../../utilities/idValidator.js";
-import { codeGen } from "../../utilities/codeGen.js";
+// import { codeGen } from "../../utilities/codeGen.js";
 
 // Reusable functions
 
@@ -10,12 +10,8 @@ const create = async (req, res) => {
         const blogPayload = req.body
         const user = req.user || null
 
-        const blocks = blogPayload?.blocks?.map(elm => ({
-            blockId: codeGen(`Block${elm?.type}${elm?.content}`),
-            ...elm
-        }))
-        Object.assign(blogPayload, { blocks, status: 'Active', createdBy: user?._id })
-        const blogDetails = await Blog.create(blogPayload)
+        const newPayload = { ...blogPayload, status: 'Active', createdBy: user?._id }
+        const blogDetails = await Blog.create(newPayload)
         if (!blogDetails) return res.status(401).json({ message: 'Blog creation failed.', success: false })
         return res.status(201).json({ message: 'Blog created successfully.', success: true, data: blogDetails })
     } catch (error) {
@@ -52,13 +48,9 @@ const update = async (req, res) => {
         const blogPayload = req.body
         const user = req.user || null
         if (!blogId) return res.status(401).json({ message: 'Invalid Blog Id', success: false })
-        
-        const blocks = blogPayload?.blocks?.map(elm => ({
-            blockId: codeGen(`Block${elm?.type}${elm?.content}`),
-            ...elm
-        }))
-        ['_id', '__V', 'blocks', 'createdBy'].forEach(itm => delete blogPayload[itm])
-        const updatedPayload = { ...blogPayload, blocks, status: 'Active', updatedBy: user?._id }
+
+        ['_id', '__V', 'createdBy'].forEach(itm => delete blogPayload[itm])
+        const updatedPayload = { ...blogPayload, status: 'Active', updatedBy: user?._id }
         
         const blogUpdated = await Blog.findByIdAndUpdate(blogId, updatedPayload, { new: true })
         if (!blogUpdated) return res.status(401).json({ message: 'Blog update failed.', success: false })
