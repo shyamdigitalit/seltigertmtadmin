@@ -1,6 +1,6 @@
 import express from "express";
-import { accountList, bulkCreateAccount, createAccount, deleteAccount, updateAccount, } from "../controller/account.js";
-import authMiddleware from "../middleware/auth.js";
+import { accountList, bulkCreateAccount, createAccount, deleteAccount, updateAccount, } from "../../controller/admin/account.js";
+import authMiddleware from "../../middleware/auth.js";
 
 const accountRouter = express.Router();
 

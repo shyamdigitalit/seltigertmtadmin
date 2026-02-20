@@ -7,12 +7,13 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import connectDB from './config/db.js';
 import authRouter from './router/auth.js';
-import accountRouter from './router/account.js';
+import accountRouter from './router/admin/account.js';
 import leadRouter from './router/lead.js';
 import subcategoryRouter from './router/masters/subcategory.js';
 import productRouter from './router/masters/product.js';
 import stateRouter from './router/masters/state.js';
-import settingRouter from './router/setting.js';
+import settingRouter from './router/admin/setting.js';
+import blogRouter from './router/admin/blog.js';
 dotenv.config();
 
 await connectDB();
@@ -75,6 +76,7 @@ app.use("/api/subcategory", subcategoryRouter)
 app.use("/api/product", productRouter)
 app.use("/api/state", stateRouter)
 app.use("/api/settings", settingRouter)
+app.use("/api/blogs", blogRouter)
 
 // static frontend delivery
 if (apienv === 'live') {

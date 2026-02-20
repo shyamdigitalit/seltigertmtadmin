@@ -1,4 +1,4 @@
-import Account from '../model/account';
+import Account from '../model/admin/account';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { generateAccessToken, generateRefreshToken } from '../config/token';

@@ -1,4 +1,4 @@
-import Settings from "../model/setting";
+import Settings from "../../model/admin/setting.js";
 
 /**
  * GET SETTINGS (Singleton)

@@ -1,6 +1,6 @@
 import express from "express";
-import { getSettings, upsertSettings } from "../controller/setting.js";
-import authMiddleware from "../middleware/auth.js";
+import { getSettings, upsertSettings } from "../../controller/admin/setting.js";
+import authMiddleware from "../../middleware/auth.js";
 
 const settingRouter = express.Router();
 

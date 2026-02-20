@@ -1,6 +1,6 @@
-import Account from "../model/account.js";
+import Account from "../../model/admin/account.js";
 import bcrypt from 'bcrypt';
-import { generateAccessToken, generateRefreshToken } from "../config/token.js";
+import { generateAccessToken, generateRefreshToken } from "../../config/token.js";
 
 const createAccount = async (req, res) => {
   try {
