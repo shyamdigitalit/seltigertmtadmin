@@ -1,6 +1,5 @@
 import Blog from "../../model/admin/blog.js";
 import { idValidator } from "../../utilities/idValidator.js";
-// import { codeGen } from "../../utilities/codeGen.js";
 
 // Reusable functions
 

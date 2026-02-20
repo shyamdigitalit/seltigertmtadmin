@@ -40,38 +40,19 @@ const loginAccount = async (req, res) => {
 }
 
 const checkSession = async (req, res) => {
-    try {
-        const token = req.cookies.accessToken;
-        if (!token) return res.status(401).json({ message: 'Not authenticated', statuscode: 401 });
+  try {
+    const token = req.cookies.accessToken;
+    if (!token) return res.status(401).json({ message: 'Not authenticated', statuscode: 401 });
 
-        const account = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
-        if (!account) return res.status(404).json({ message: 'Account not found', statuscode: 404 });
+    const account = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+    if (!account) return res.status(404).json({ message: 'Account not found', statuscode: 404 });
 
-        // console.log(account);
-        res.status(200).json({ message: 'Session is live', statuscode: 200, data: account });
-    } catch (err) {
-        return res.status(419).json({ message: 'Session invalid or expired', statuscode: 419 });
-    }
+    // console.log(account);
+    res.status(200).json({ message: 'Session is live', statuscode: 200, data: account });
+  } catch (err) {
+    return res.status(419).json({ message: 'Session invalid or expired', statuscode: 419 });
+  }
 };
-
-// const refreshToken = async (req, res) => {
-//     const token = req.cookies.refreshToken;
-//     if (!token) return res.status(401).json({ message: 'No token provided', statuscode: 401 });
-
-//     try {
-//         const decoded = verifyRefreshToken(token);
-//         const session = await sessModel.findOne({ sessacc: decoded.sessacc, refreshToken: token });
-//         if (!session) return res.status(419).json({ message: 'Invalid session', statuscode: 419 });
-
-//         const newAccessToken = generateAccessToken({ _id: decoded.sessacc });
-//         res.status(200)
-//         .cookie('accessToken', newAccessToken, { httpOnly: true, sameSite: 'Lax', secure: env === 'live', maxAge: accessTokenExpiryTTL })
-//         .json({ message:'Ok', statuscode: 200, accessToken: newAccessToken });
-
-//     } catch {
-//         res.status(419).json({ message: 'Token expired or invalid', statuscode: 419 });
-//     }
-// };
 
 const refreshToken = async (req, res) => {
   try {
