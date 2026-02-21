@@ -9,8 +9,11 @@ import BlogList from "./blog-list";
 import axiosInstance from "../../config/axiosInstance";
 
 const defaultValues = {
-  title: "",
+  slug: "",
   meta: {
+    title: "",
+    robots: "",
+    canonical: "",
     description: "",
     url: "",
     type: "",
@@ -37,8 +40,11 @@ const Blog = () => {
   const getBlogList = async () => {
 
     try {
-      const response = await axiosInstance.get("/blogs")
-      // console.log(response.data);
+      const response = await axiosInstance.get("/blogs").then(res => res.data);
+      console.log(response)
+      if(response.success){
+        setBlogs(response.data);
+      }
        
     } catch (error) {
       
@@ -55,7 +61,7 @@ const Blog = () => {
     reset(defaultValues);
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const payload = {
       id: selectedBlogId || Date.now(),
       title: data.title,
@@ -64,17 +70,22 @@ const Blog = () => {
     };
 
     console.log(payload)
-    if (selectedBlogId) {
-      setBlogs((prev) =>
-        prev.map((b) => (b.id === selectedBlogId ? payload : b))
-      );
-    } else {
-      setBlogs((prev) => [...prev, payload]);
+    try {
+      const url = selectedBlogId ? `/blogs/update?id=${selectedBlogId}` : "/blogs";
+      const response = await axiosInstance[selectedBlogId ? "patch":"post"](url, payload).then(res => res.data);
+      console.log(response)
+      if(response.success){
+        getBlogList();
+        addNewBlog();
+      }
+    }catch (error) {
+      console.log(error)
     }
   };
 
   const editBlog = (blog) => {
-    setSelectedBlogId(blog.id);
+    console.log(blog)
+    setSelectedBlogId(blog._id);
     setBlocks(blog.blocks);
     reset({
       title: blog.title,
@@ -83,9 +94,18 @@ const Blog = () => {
     setActiveBlock(null);
   };
 
-  const deleteBlog = (id) => {
-    setBlogs((prev) => prev.filter((b) => b.id !== id));
-    if (id === selectedBlogId) addNewBlog();
+  const deleteBlog = async (id) => {
+    try {
+      const response = await axiosInstance.put(`/blogs/delete?id=${id}`).then(res => res.data);
+      console.log(response)
+      if(response.success){
+        getBlogList();
+      }
+    }catch (error) {
+
+    }
+    // setBlogs((prev) => prev.filter((b) => b._id !== id));
+    // if (id === selectedBlogId) addNewBlog();
   };
 
   /* ---------------- BLOCK CRUD ---------------- */
@@ -137,21 +157,44 @@ const Blog = () => {
               <Typography variant="h6">Blog Editor</Typography>
 
               <Button variant="contained" onClick={handleSubmit(onSubmit)}>
-                Save Blog
+                {selectedBlogId ? "Update":"Add New"} Blog
               </Button>
             </Box>
 
-            {/* Blog Title */}
-            <Controller name="title" control={control} rules={{ required: "Blog title is required" }}
-              render={({ field, fieldState }) => (
-                <TextField {...field} label="Blog Title" fullWidth sx={{ mb: 2 }}
-                  error={!!fieldState.error} helperText={fieldState.error?.message}
+            <Grid container display={"grid"} gridTemplateColumns={"2fr 1fr"} spacing={2} mb={2}>
+              <Grid item>
+                <Controller name="meta.title" control={control} rules={{ required: "Blog title is required" }}
+                  render={({ field, fieldState }) => (
+                    <TextField {...field} label="Blog Title" fullWidth
+                      error={!!fieldState.error} helperText={fieldState.error?.message}
+                    />
+                  )}
                 />
-              )}
-            />
+              </Grid>
+              <Grid item>
+                <Controller name="slug" control={control} rules={{ required: "Slug is required" }}
+                  render={({ field, fieldState }) => (
+                    <TextField {...field} label="Slug" fullWidth
+                      error={!!fieldState.error} helperText={fieldState.error?.message}
+                    />
+                  )}
+                />
+              </Grid>
+
+            </Grid>
 
             {/* Meta Fields */}
-            <Grid container spacing={2} mb={3}>
+            <Grid container display={"grid"} gridTemplateColumns={"1fr 1fr 1fr"} spacing={2} mb={3}>
+              <Grid item xs={6}>
+                <Controller name="meta.robots" control={control}
+                  render={({ field }) => ( <TextField {...field} label="Robots" fullWidth /> )}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <Controller name="meta.canonical" control={control}
+                  render={({ field }) => ( <TextField {...field} label="Canonical" fullWidth /> )}
+                />
+              </Grid>
               <Grid item xs={12}>
                 <Controller name="meta.description" control={control}
                   render={({ field }) => ( <TextField {...field} label="Meta Description" fullWidth /> )}

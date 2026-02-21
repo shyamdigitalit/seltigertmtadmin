@@ -13,12 +13,12 @@ const BlogList = ({ addNewBlog, blogs, selectedBlogId, editBlog, deleteBlog }) =
             <List>
                 {blogs.map((blog) => (
                 <ListItem
-                    style={{ backgroundColor: blog.id === selectedBlogId ? "lightgray" : "transparent", cursor: "pointer" }}  
-                    key={blog.id}
+                    style={{ backgroundColor: blog._id === selectedBlogId ? "lightgray" : "transparent", cursor: "pointer" }}  
+                    key={blog._id}
                     secondaryAction={
                         <Stack direction="row">
                             <IconButton onClick={() => editBlog(blog)} > <Edit fontSize="small" /> </IconButton>
-                            <IconButton color="error" onClick={() => deleteBlog(blog.id)} >
+                            <IconButton color="error" onClick={() => deleteBlog(blog._id)} >
                                 <Delete fontSize="small" />
                             </IconButton>
                         </Stack>
