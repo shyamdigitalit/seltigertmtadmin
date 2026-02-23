@@ -63,10 +63,9 @@ const Blog = () => {
 
   const onSubmit = async (data) => {
     const payload = {
-      id: selectedBlogId || Date.now(),
-      title: data.title,
-      blocks,
+      slug: data.slug,
       meta: data.meta,
+      blocks,
     };
 
     console.log(payload)
