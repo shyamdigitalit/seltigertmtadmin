@@ -3,6 +3,10 @@ import { Button, Stack } from "@mui/material";
 const BLOCK_TYPES = [
   { label: "H1", value: "h1" },
   { label: "H2", value: "h2" },
+  { label: "H3", value: "h3" },
+  { label: "H4", value: "h4" },
+  { label: "H5", value: "h5" },
+  { label: "H6", value: "h6" },
   { label: "Paragraph", value: "p" },
   { label: "Image", value: "img" },
 ];
@@ -17,7 +21,7 @@ const AddBlockButton = ({ activeBlock, startAddBlock }) => (
         disabled={!!activeBlock}
         onClick={() => startAddBlock(b.value)}
       >
-        Add {b.label}
+        {b.label}
       </Button>
     ))}
   </Stack>

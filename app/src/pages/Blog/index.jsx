@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Grid, Card, CardContent, Typography, Button, TextField, Box } from "@mui/material";
+import { Grid, Card, CardContent, Typography, Button, TextField, Box, IconButton } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 
 import AddBlockButton from "./add-block-buttons";
@@ -7,6 +7,7 @@ import ActiveBlockEditor from "./active-block-editor";
 import BlockPreview from "./block-preview";
 import BlogList from "./blog-list";
 import axiosInstance from "../../config/axiosInstance";
+import { Close } from "@mui/icons-material";
 
 const defaultValues = {
   slug: "",
@@ -155,9 +156,12 @@ const Blog = () => {
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
               <Typography variant="h6">Blog Editor</Typography>
 
-              <Button variant="contained" onClick={handleSubmit(onSubmit)}>
-                {selectedBlogId ? "Update":"Add New"} Blog
-              </Button>
+              <Box display={"flex"} gap={2}>
+                <Button variant="contained" onClick={handleSubmit(onSubmit)}>
+                  {selectedBlogId ? "Update":"Add New"} Blog
+                </Button>
+                {selectedBlogId && <IconButton color="error" onClick={() => addNewBlog()}> <Close /> </IconButton>}
+              </Box>
             </Box>
 
             <Grid container display={"grid"} gridTemplateColumns={"2fr 1fr"} spacing={2} mb={2}>
