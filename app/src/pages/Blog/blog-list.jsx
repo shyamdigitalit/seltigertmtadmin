@@ -24,7 +24,7 @@ const BlogList = ({ addNewBlog, blogs, selectedBlogId, editBlog, deleteBlog }) =
                         </Stack>
                     }
                 >
-                    <ListItemText primary={blog.title.length > 30 ? blog.title.substring(0, 30) + " ..." : blog.title} 
+                    <ListItemText primary={blog.meta.title.length > 30 ? blog.meta.title.substring(0, 30) + " ..." : blog.meta.title} 
                     />
                 </ListItem>
                 ))}

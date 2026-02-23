@@ -87,7 +87,7 @@ const Blog = () => {
     setSelectedBlogId(blog._id);
     setBlocks(blog.blocks);
     reset({
-      title: blog.title,
+      slug: blog.slug,
       meta: blog.meta || defaultValues.meta,
     });
     setActiveBlock(null);
