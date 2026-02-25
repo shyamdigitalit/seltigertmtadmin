@@ -22,7 +22,7 @@ const __dirname = path.dirname(__filename);
 
 const allowedOrigins = {
     dev: {
-        quality: ['http://localhost:3047'],
+        quality: ['http://localhost:3032', 'http://localhost:3047'],
         production: ['http://localhost:3046']
     },
     live: {
