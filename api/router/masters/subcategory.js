@@ -6,6 +6,6 @@ const subcategoryRouter = express.Router()
 
 subcategoryRouter.post('/', subcategory.create)
 subcategoryRouter.get('/', subcategory.read)
-subcategoryRouter.delete('/delete', subcategory.remove)
+subcategoryRouter.delete('/delete', authMiddleware, subcategory.remove)
 
 export default subcategoryRouter

@@ -4,7 +4,7 @@ import lead from "../controller/lead.js";
 
 const leadRouter = express.Router()
 
-leadRouter.post('/', authMiddleware, lead.create)
+leadRouter.post('/', lead.create)
 leadRouter.get('/', authMiddleware, lead.read)
 leadRouter.delete('/delete', authMiddleware, lead.remove)
 

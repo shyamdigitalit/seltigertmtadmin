@@ -41,6 +41,18 @@ const readById = async (req, res) => {
     }
 }
 
+const readBySlug = async (req, res) => {
+    try {
+        const blogSlug = String(req.query.slug || '').trim()
+        if (!blogSlug) return res.status(400).json({ message: 'Invalid Blog Slug', success: false })
+        const blogDetails = await Blog.findOne({ slug: blogSlug }).populate(['blocks', 'createdBy', 'updatedBy']).lean()
+        return res.status(200).json({ message: 'Blog details fetched successfully.', success: true, data: blogDetails })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ message: 'Internal Server Error', success: false })
+    }
+}
+
 const update = async (req, res) => {
     try {
         const blogId = idValidator(req.query.id || null)
@@ -76,6 +88,7 @@ export default {
     create,
     read,
     readById,
+    readBySlug,
     update,
     remove
 }

@@ -6,6 +6,6 @@ const stateRouter = express.Router()
 
 stateRouter.post('/', state.create)
 stateRouter.get('/', state.read)
-stateRouter.delete('/delete', state.remove)
+stateRouter.delete('/delete', authMiddleware, state.remove)
 
 export default stateRouter
