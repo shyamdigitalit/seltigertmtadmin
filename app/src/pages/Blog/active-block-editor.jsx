@@ -1,10 +1,41 @@
-import { Save } from "@mui/icons-material";
-import { Button, Card, CardContent, Stack, TextField } from "@mui/material";
+import { Delete, Save } from "@mui/icons-material";
+import { Button, Card, CardContent, IconButton, Stack, TextField } from "@mui/material";
 
 const ActiveBlockEditor = ({ activeBlock, setActiveBlock, saveBlock }) => (
   <Card variant="outlined" sx={{ mb: 2 }}>
     <CardContent>
-      {activeBlock.type === "img" ? (
+      {activeBlock.type === "ul" ? (
+        <Stack spacing={2}>
+          {activeBlock.items?.map((item, i) => (
+            <Stack direction="row" spacing={1} alignItems="center" key={i}>
+              
+              <TextField label={`Item ${i + 1}`} fullWidth value={item}
+                onChange={(e) => {
+                  const updated = [...activeBlock.items];
+                  updated[i] = e.target.value;
+                  setActiveBlock({ ...activeBlock, items: updated });
+                }}
+              />
+
+              {/* ❌ Delete button */}
+              <IconButton color="error"
+                onClick={() => {
+                  const updated = activeBlock.items.filter((_, idx) => idx !== i);
+                  setActiveBlock({ ...activeBlock, items: updated.length ? updated : [""],  });
+                }}
+              >
+                <Delete />
+              </IconButton>
+
+            </Stack>
+          ))}
+
+          {/* ➕ Add Item */}
+          <Button onClick={() => setActiveBlock({ ...activeBlock, items: [...(activeBlock.items || []), ""], }) } >
+            Add Item
+          </Button>
+        </Stack>
+      ) : activeBlock.type === "img" ? (
         <Stack spacing={2}>
           <TextField label="Image URL" fullWidth value={activeBlock.src}
             onChange={(e) => setActiveBlock({ ...activeBlock, src: e.target.value, })}

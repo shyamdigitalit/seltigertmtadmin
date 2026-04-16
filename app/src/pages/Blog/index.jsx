@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Grid, Card, CardContent, Typography, Button, TextField, Box, IconButton } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 
@@ -24,6 +24,7 @@ const defaultValues = {
 };
 
 const Blog = () => {
+  const bottomRef = useRef(null);
   const [blogs, setBlogs] = useState([]);
   const [selectedBlogId, setSelectedBlogId] = useState(null);
   const [blocks, setBlocks] = useState([]);
@@ -124,6 +125,7 @@ const Blog = () => {
   const startEditBlock = (block, index) => {
     setActiveBlock({ ...block });
     setEditingIndex(index);
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const saveBlock = () => {
@@ -245,6 +247,9 @@ const Blog = () => {
             )}
           </CardContent>
         </Card>
+
+        {/* 👇 this is the bottom anchor */}
+        <div ref={bottomRef} style={{ height: "200px" }}   />
       </Grid>
 
       {/* RIGHT – BLOG LIST */}

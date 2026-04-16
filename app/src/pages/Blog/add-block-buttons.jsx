@@ -9,6 +9,7 @@ const BLOCK_TYPES = [
   { label: "H6", value: "h6" },
   { label: "Paragraph", value: "p" },
   { label: "Image", value: "img" },
+  { label: "List", value: "ul" },
 ];
 
 const AddBlockButton = ({ activeBlock, startAddBlock }) => (

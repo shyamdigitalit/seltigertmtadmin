@@ -15,6 +15,13 @@ const BlockPreview = ({ index, block, startEditBlock, deleteBlock }) => (
                 {block.type === "h6" && ( <h6> {block.content} </h6> )}
                 {block.type === "p" && ( <Typography paragraph> {block.content} </Typography> )}
                 {block.type === "img" && ( <img src={block.src} alt={block.alt} style={{ maxWidth: "100%", borderRadius: 6 }} /> )}
+                {block.type === "ul" && (
+                    <ul>
+                        {block.items?.map((item, i) => (
+                        <li key={i}>{item}</li>
+                        ))}
+                    </ul>
+                )}
             </Box>
 
             <Stack direction="row">
