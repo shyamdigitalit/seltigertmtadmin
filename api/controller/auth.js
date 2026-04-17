@@ -18,8 +18,14 @@ const loginAccount = async (req, res) => {
       const refreshToken = generateRefreshToken(response);
       // console.log(accessToken);
       // console.log(refreshToken);
-      
+
       res.status(200)
+      .cookie('accessToken', accessToken, {
+        httpOnly: true,
+        sameSite: 'Lax',
+        secure: process.env.NODE_ENV === 'live',
+        maxAge: 60 * 1000,
+      })
       .cookie('refreshToken', refreshToken, {
         httpOnly: true,
         sameSite: 'Lax',
@@ -56,27 +62,66 @@ const checkSession = async (req, res) => {
   }
 };
 
+// const refreshToken = async (req, res) => {
+//   try {
+//     const token = req.cookies.refreshToken;
+//     if (!token) return res.status(401).json({ status: 401, message: "Refresh token is required", });
+
+//     const account = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+//     const accessToken = generateAccessToken(account);
+
+//     return res
+//       .status(200)
+//       .cookie('accessToken', accessToken, {
+//         httpOnly: true,
+//         sameSite: 'Lax',
+//         secure: process.env.NODE_ENV === 'live',
+//         maxAge: 60 * 1000,
+//       })
+//       .json({ status: 200, data: accessToken });
+//   } catch (error) {
+//     if (error.name === "TokenExpiredError") {
+//       return res.status(403).json({ status: 403, message: "Refresh token expired", });
+//     }
+//     return res.status(403).json({ status: 403, message: "Invalid refresh token", });
+//   }
+// };
+
 const refreshToken = async (req, res) => {
   try {
     const token = req.cookies.refreshToken;
-    if (!token) return res.status(401).json({ status: 401, message: "Refresh token is required", });
+    if (!token)
+      return res.status(401).json({ status: 401, message: "Refresh token required" });
 
     const account = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
-    const accessToken = generateAccessToken(account)
-    return res.status(200).json({ status: 200, data: accessToken });
+
+    const accessToken = generateAccessToken(account);
+
+    return res
+      .status(200)
+      .cookie('accessToken', accessToken, {
+        httpOnly: true,
+        sameSite: 'Lax',
+        secure: process.env.NODE_ENV === 'live',
+        maxAge: 60 * 1000,
+      })
+      .json({ status: 200, data: accessToken });
 
   } catch (error) {
-    if (error.name === "TokenExpiredError") {
-      return res.status(403).json({ status: 403, message: "Refresh token expired", });
-    }
-    return res.status(403).json({ status: 403, message: "Invalid refresh token", });
+    return res.status(403).json({ status: 403, message: "Invalid/Expired refresh token" });
   }
 };
 
 
 const logoutAccount = (req, res) => {
   res.clearCookie("refreshToken");
-  return res.status(200).json({ status: 200, message: "Logged out", success: true });
+  res.clearCookie("accessToken");
+
+  return res.status(200).json({
+    status: 200,
+    message: "Logged out",
+    success: true
+  });
 };
 
 
