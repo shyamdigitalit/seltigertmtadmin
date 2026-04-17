@@ -168,9 +168,9 @@ const Blog = () => {
 
             <Grid container display={"grid"} gridTemplateColumns={"2fr 1fr"} spacing={2} mb={2}>
               <Grid item>
-                <Controller name="meta.title" control={control} rules={{ required: "Blog title is required" }}
+                <Controller name="meta.title" control={control} rules={{ required: "Meta title is required" }}
                   render={({ field, fieldState }) => (
-                    <TextField {...field} label="Blog Title" fullWidth
+                    <TextField {...field} label="Meta Title" fullWidth
                       error={!!fieldState.error} helperText={fieldState.error?.message}
                     />
                   )}
