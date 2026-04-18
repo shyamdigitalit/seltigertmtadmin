@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axiosInstance from '../../config/axiosInstance.js';
+import axiosInstance from '../../config/axiosInstance';
 
 const initvl = {
     user: null,
@@ -17,6 +17,15 @@ export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI
     }
 });
 
+export const checkSession = createAsyncThunk('auth/checkSession', async (_, thunkAPI) => {
+    try {
+        const res = await axiosInstance.get('/auth/session');
+        return res.data.data;
+    } catch (err) {
+        return thunkAPI.rejectWithValue('Session expired');
+    }
+});
+
 export const logout = createAsyncThunk('auth/logout', async () => {
     const data = await axiosInstance.post('/auth/logout').then(res => res.data);
     return data;
@@ -28,7 +37,9 @@ const authSlice = createSlice({
     initialState: initvl,
     reducers: {
         setAccessToken: (state, action) => {
-            state.user = { ...state.user, token: action.payload.data };
+            if (state.user) {
+                state.user.token = action.payload;
+            }
             state.isAuthenticated = true;
         }
     },
@@ -41,12 +52,23 @@ const authSlice = createSlice({
         .addCase(login.fulfilled, (state, action) => {
             state.loading = false;
             state.isAuthenticated = true;
-            // console.log(action.payload);
-            state.user = action.payload.data.account
+
+            state.user = {
+                ...action.payload.data.account,
+                token: action.payload.data.accessToken
+            };
         })
         .addCase(login.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload;
+        })
+        .addCase(checkSession.fulfilled, (state, action) => {
+            state.isAuthenticated = true;
+            state.user = action.payload;
+        })
+        .addCase(checkSession.rejected, (state) => {
+            state.isAuthenticated = false;
+            state.user = null;
         })
         .addCase(logout.fulfilled, (state) => {
             state.isAuthenticated = false;

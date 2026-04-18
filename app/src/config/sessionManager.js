@@ -1,5 +1,3 @@
-// sessionManager.js
-
 let refreshTimer = null;
 
 export const startSessionTimer = (store, axiosInstance) => {
@@ -20,11 +18,10 @@ export const startSessionTimer = (store, axiosInstance) => {
         scheduleRefresh();
 
       } catch (err) {
-        // ❌ refresh failed → logout
         store.dispatch({ type: 'auth/logout' });
         stopSessionTimer();
       }
-    }, 50 * 1000); // refresh at 50s (token = 60s)
+    }, 30 * 1000); // refresh at 30s (token = 60s)
   };
 
   scheduleRefresh();
