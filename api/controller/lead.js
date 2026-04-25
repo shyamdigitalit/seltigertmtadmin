@@ -4,22 +4,25 @@ import { codeGen } from '../utilities/codeGen.js';
 import Subcategory from '../model/masters/subcategory.js';
 
 // Reusables Functions
-export const leadIdGen = async (subCategoryId, firmName, phoneNum) => {
+export const leadNoGen = async (subCategoryId, firmName, phone) => {
     const subCategoryDetails = await Subcategory.findById(subCategoryId).lean()
-    return `${subCategoryDetails?.subcategoryCode}${codeGen(`${subCategoryDetails?.subcategoryCode}${firmName}${phoneNum}`)}`
+    const leadNo = `${subCategoryDetails?.subcategoryCode}${codeGen(`${subCategoryDetails?.subcategoryCode}${firmName}${phone}`)}`
+    // console.log(leadNo);
+    return leadNo;
 }
 
 // Controller logics
 const create = async (req, res) => {
     try {
         const leadPayload = req.body
+        // console.log(leadPayload);
         Object.assign(leadPayload, {
-            leadId: await leadIdGen(leadPayload?.subCategory, leadPayload?.firmName, leadPayload?.phoneNumber),
+            leadNo: await leadNoGen(leadPayload?.subCategory || null, leadPayload?.firmName || '', leadPayload?.phone || ''),
             subCategory: idValidator(leadPayload?.subCategory),
             state: idValidator(leadPayload?.state),
             product: idValidator(leadPayload?.product)
         })
-        const existingLead = await Lead.findOne({ leadId: leadPayload?.leadId })
+        const existingLead = await Lead.findOne({ leadNo: leadPayload?.leadNo })
         if (!existingLead) {
             const newLead = await Lead.create(leadPayload)
             if (!newLead) return res.status(401).json({ message: 'Lead details creation failed.' })
@@ -27,7 +30,7 @@ const create = async (req, res) => {
         }
         else {
             ['_id', '__v', 'createdAt', 'updatedAt'].forEach(elm => delete leadPayload[elm])
-            const existingLead = await Lead.findOneAndUpdate({ leadId: leadPayload?.leadId }, leadPayload, { new: true })
+            const existingLead = await Lead.findOneAndUpdate({ leadNo: leadPayload?.leadNo }, leadPayload, { new: true })
             if (!existingLead) return res.status(401).json({ message: 'Existing Lead details update failed.' })
             return res.status(201).json({ message: 'Existing Lead details updated successfully.', data: existingLead })
         }

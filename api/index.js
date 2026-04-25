@@ -27,7 +27,13 @@ const allowedOrigins = {
     },
     live: {
         quality: ['https://seltigertmtadmin-qas.shyamgroup.com'],
-        production: ['https://seltigertmtadmin.shyamgroup.com']
+        production: [
+            'https://seltigertmtadmin.shyamgroup.com',
+            'https://seltigertmt.com',
+            'https://www.seltigertmt.com',
+            'https://admin.seltigertmt.com',
+            'https://www.admin.seltigertmt.com',
+        ]
     }
 };
 const portDetails = {
@@ -92,7 +98,7 @@ if (apienv === 'live') {
 }
 
 
-// No host param → cluster shares the TCP handle
+// No host param â†’ cluster shares the TCP handle
 app.listen(port, host, () => {
     console.log(`Server is running on ${host}:${port}`)
 })
