@@ -73,7 +73,7 @@ app.use(cors({
 }));
 app.use(bodyParser.json({ limit: '10000mb' }));
 app.use(bodyParser.urlencoded({ limit: '10000mb', extended: true }));
-// app.use(express.static('uploads'));
+app.use(express.static('uploads'));
 
 app.use("/api/auth", authRouter)
 app.use("/api/account", accountRouter)
