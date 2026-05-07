@@ -14,6 +14,7 @@ import productRouter from './router/masters/product.js';
 import stateRouter from './router/masters/state.js';
 import settingRouter from './router/admin/setting.js';
 import blogRouter from './router/admin/blog.js';
+import fileRouter from './router/file.js';
 dotenv.config();
 
 await connectDB();
@@ -83,6 +84,7 @@ app.use("/api/product", productRouter)
 app.use("/api/state", stateRouter)
 app.use("/api/settings", settingRouter)
 app.use("/api/blogs", blogRouter)
+app.use("/api/files", fileRouter)
 
 // static frontend delivery
 if (apienv === 'live') {

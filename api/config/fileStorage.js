@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import crypto from "crypto";
 import archiver from "archiver";
-import File from "../models/fileModel.js";
+import File from "../model/file.js";
 import mongoose from "mongoose";
 
 const BASE_UPLOAD_DIR = path.join(process.cwd(), "uploads");

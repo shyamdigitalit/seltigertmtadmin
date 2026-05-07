@@ -26,10 +26,9 @@ export const uploadHandler = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            message:
-                result.duplicates.length > 0
-                    ? "Files uploaded with duplicate reuse"
-                    : "Files uploaded successfully",
+            message: result.duplicates.length > 0
+                ? "Files uploaded with duplicate reuse"
+                : "Files uploaded successfully",
             uploadedCount: result.uploaded.length,
             duplicateCount: result.duplicates.length,
             duplicateFiles: result.duplicates,
@@ -187,16 +186,4 @@ export const deleteManyHandler = async (req, res) => {
             error: error.message
         });
     }
-};
-
-/* ------------------------------------------------------------------
-   ✅ Default Export
------------------------------------------------------------------- */
-export default {
-    uploadHandler,
-    getAllHandler,
-    downloadHandler,
-    downloadAllHandler,
-    deleteHandler,
-    deleteManyHandler
 };

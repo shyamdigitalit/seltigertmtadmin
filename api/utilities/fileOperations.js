@@ -4,7 +4,7 @@ import {
     getFileStream,
     getZipStream,
     deleteFile
-} from "../configs/fileStorage.js";
+} from "../config/fileStorage.js";
 
 /* ------------------------------------------------------------------
    ✅ Upload multiple files
