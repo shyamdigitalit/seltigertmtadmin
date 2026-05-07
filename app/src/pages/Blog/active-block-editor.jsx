@@ -2,26 +2,43 @@ import React from "react";
 import { Delete, Save, Upload } from "@mui/icons-material";
 import { Button, Card, CardContent, CircularProgress, IconButton, Stack, TextField } from "@mui/material";
 import axiosInstance from "../../config/axiosInstance";
+import axios from "axios";
 
 const ActiveBlockEditor = ({ activeBlock, setActiveBlock, saveBlock }) => {
 
   const [selectedFile, setSelectedFile] = React.useState(null);
   const [uploading, setUploading] = React.useState(false);
+  
+  const handleFileChange = (e) => {
+    // console.log(e.target.files);
+    setSelectedFile(Array.from(e.target.files));
+  }
 
   // 🔥 Upload Image API
   const handleUpload = async () => {
-    if (!selectedFile) return;
+    // if (!selectedFile) return;
+    if (selectedFile?.length === 0) return;
 
     try {
       setUploading(true);
+      // console.log('x1');
 
-      // const formData = new FormData();
+      console.log(selectedFile);
+
+      const formData = new FormData();
       // formData.append("files", selectedFile);
+      selectedFile.forEach((file) => {
+        formData.append("files", file);
+      });
 
       // Replace with your API
-      const response = await axiosInstance.post("/files/upload", {files: selectedFile});
+      const response = await axios.post(`http://localhost:5047/api/files/upload`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
 
-      const data = await response.json();
+      const data = await response.data;
       console.log(data)
       // assuming API returns { imageUrl: "https://..." }
       // setActiveBlock({
@@ -74,10 +91,12 @@ const ActiveBlockEditor = ({ activeBlock, setActiveBlock, saveBlock }) => {
           <Stack spacing={2}>
             
             {/* File Input */}
-            <input type="file" accept="image/*" onChange={(e) => setSelectedFile(e.target.files[0])} />
+            {/* <input type="file" accept="image/*" multiple={true} onChange={(e) => setSelectedFile(Array.from(e.target.files))} /> */}
+            <input type="file" accept="image/*" multiple={true} onChange={handleFileChange} />
     
             {/* Upload Button */}
-            <Button variant="contained" onClick={handleUpload} disabled={uploading || !selectedFile}
+            <Button variant="contained" onClick={handleUpload}
+            // disabled={uploading || !selectedFile}
               startIcon={ uploading ? <CircularProgress size={18} /> : <Upload /> }
             >
               {uploading ? "Uploading..." : "Upload Image"}

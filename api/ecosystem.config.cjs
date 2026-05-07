@@ -17,7 +17,7 @@ const portDetails = {
 module.exports = {
   apps: [
     {
-      name: apiName[appenv] || "seltigerlanding-qas-api",
+      name: apiName[appenv] || "seltigertmtadmin-qas-api",
 
       // ✅ Use local tsx binary
       script: "./node_modules/.bin/tsx",

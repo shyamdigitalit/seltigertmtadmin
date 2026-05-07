@@ -14,26 +14,30 @@ import {
 ------------------------------------------------------------------ */
 export const uploadHandler = async (req, res) => {
     try {
-        if (!req.files?.files || req.files?.files?.length === 0) {
-            return res.status(400).json({
-                success: false,
-                message: "No files uploaded"
-            });
-        }
+        // if (!req.files?.files || req.files?.files?.length === 0) {
+        //     return res.status(400).json({
+        //         success: false,
+        //         message: "No files uploaded"
+        //     });
+        // }
 
-        const files = req.files?.files || [];
-        const result = await uploadFiles([].concat(files));
+        console.log(req.body);
+        console.log(req.files);
 
-        return res.status(200).json({
-            success: true,
-            message: result.duplicates.length > 0
-                ? "Files uploaded with duplicate reuse"
-                : "Files uploaded successfully",
-            uploadedCount: result.uploaded.length,
-            duplicateCount: result.duplicates.length,
-            duplicateFiles: result.duplicates,
-            files: result.uploaded
-        });
+        // const files = req.files?.files || [];
+        // console.log(files);
+        // const result = await uploadFiles([].concat(files));
+
+        // return res.status(200).json({
+        //     success: true,
+        //     message: result.duplicates.length > 0
+        //         ? "Files uploaded with duplicate reuse"
+        //         : "Files uploaded successfully",
+        //     uploadedCount: result.uploaded.length,
+        //     duplicateCount: result.duplicates.length,
+        //     duplicateFiles: result.duplicates,
+        //     files: result.uploaded
+        // });
     } catch (error) {
         console.error("Upload Handler Error:", error);
 
