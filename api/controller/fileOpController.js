@@ -9,6 +9,14 @@ import {
     deleteFiles
 } from "../utilities/fileOperations.js";
 
+const appenv = process.env.APP_ENV || 'quality';
+// const env = process.env.NODE_ENV || 'dev';
+
+const apiUrl = {
+    quality: process.env.API_QAS,
+    production: process.env.API_PRD
+}
+
 /* ------------------------------------------------------------------
    ✅ Upload Multiple Files
 ------------------------------------------------------------------ */
@@ -22,7 +30,8 @@ export const uploadHandler = async (req, res) => {
         }
         const files = req.files?.files || [];
         const result = await uploadFiles([].concat(files));
-
+        
+        result.uploaded[0].path = `${apiUrl[appenv]}/uploads/${result.uploaded[0].filename}`
         return res.status(200).json({
             success: true,
             message: result.duplicates.length > 0

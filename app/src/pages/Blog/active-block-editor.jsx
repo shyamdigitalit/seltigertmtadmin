@@ -46,23 +46,8 @@ const ActiveBlockEditor = ({ activeBlock, setActiveBlock, saveBlock }) => {
         alt: uploadedFile.originalname,
         file: {
           _id: uploadedFile._id,
-          // filename: uploadedFile.filename,
-          // originalname: uploadedFile.originalname,
-          // mimetype: uploadedFile.mimetype,
-          // size: uploadedFile.size,
-          // path: uploadedFile.path
         }
       });
-
-      // const data = await response.data;
-      // console.log(data.files[0])
-      // // assuming API returns { imageUrl: "https://..." }
-      // setActiveBlock({
-      //   ...activeBlock,
-      //   src: data.files[0].path,
-      //   alt: data.files[0].originalname
-      // });
-
     } catch (error) {
       console.error("Upload failed:", error);
     } finally {
