@@ -119,6 +119,7 @@ const ActiveBlockEditor = ({ activeBlock, setActiveBlock, saveBlock }) => {
     
             <TextField label="Image URL" fullWidth value={activeBlock.src}
               onChange={(e) => setActiveBlock({ ...activeBlock, src: e.target.value, })}
+              disabled
             />
             <TextField label="Alt Text" fullWidth value={activeBlock.alt}
               onChange={(e) => setActiveBlock({ ...activeBlock, alt: e.target.value, })}
