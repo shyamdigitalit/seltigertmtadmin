@@ -22,10 +22,12 @@ const axiosInstance = axios.create({
 });
 
 export const setupInterceptors = (store) => {
-
   axiosInstance.interceptors.request.use(
     (config) => {
-      config.headers['Content-Type'] = 'application/json';
+      // ✅ ONLY set JSON content-type when NOT FormData
+      if (!(config.data instanceof FormData)) {
+        config.headers['Content-Type'] = 'application/json';
+      }
       config.headers['Accept'] = 'application/json';
 
       const isAuthEndpoint =

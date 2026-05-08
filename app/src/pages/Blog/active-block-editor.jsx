@@ -3,6 +3,7 @@ import { Delete, Save, Upload } from "@mui/icons-material";
 import { Button, Card, CardContent, CircularProgress, IconButton, Stack, TextField } from "@mui/material";
 import axiosInstance from "../../config/axiosInstance";
 import axios from "axios";
+const apiUrl = import.meta.env.VITE_API_URL_DEVQ;
 
 const ActiveBlockEditor = ({ activeBlock, setActiveBlock, saveBlock }) => {
 
@@ -32,18 +33,34 @@ const ActiveBlockEditor = ({ activeBlock, setActiveBlock, saveBlock }) => {
       });
 
       // Replace with your API
-      const response = await axios.post(`http://localhost:5047/api/files/upload`, formData, {
+      const response = await axiosInstance.post("/files/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         }
       });
+      const uploadedFile = await response.data.file;
+      console.log(uploadedFile)
+      setActiveBlock({
+        ...activeBlock,
+        src: uploadedFile.path,
+        alt: uploadedFile.originalname,
+        file: {
+          _id: uploadedFile._id,
+          // filename: uploadedFile.filename,
+          // originalname: uploadedFile.originalname,
+          // mimetype: uploadedFile.mimetype,
+          // size: uploadedFile.size,
+          // path: uploadedFile.path
+        }
+      });
 
-      const data = await response.data;
-      console.log(data)
-      // assuming API returns { imageUrl: "https://..." }
+      // const data = await response.data;
+      // console.log(data.files[0])
+      // // assuming API returns { imageUrl: "https://..." }
       // setActiveBlock({
       //   ...activeBlock,
-      //   src: data.imageUrl,
+      //   src: data.files[0].path,
+      //   alt: data.files[0].originalname
       // });
 
     } catch (error) {
@@ -91,8 +108,7 @@ const ActiveBlockEditor = ({ activeBlock, setActiveBlock, saveBlock }) => {
           <Stack spacing={2}>
             
             {/* File Input */}
-            {/* <input type="file" accept="image/*" multiple={true} onChange={(e) => setSelectedFile(Array.from(e.target.files))} /> */}
-            <input type="file" accept="image/*" multiple={true} onChange={handleFileChange} />
+            <input type="file" accept="image/*" onChange={handleFileChange} />
     
             {/* Upload Button */}
             <Button variant="contained" onClick={handleUpload}
@@ -101,6 +117,20 @@ const ActiveBlockEditor = ({ activeBlock, setActiveBlock, saveBlock }) => {
             >
               {uploading ? "Uploading..." : "Upload Image"}
             </Button>
+            {
+              activeBlock?.src && (
+                <img
+                  src={`${apiUrl}/files/fetch/${activeBlock.file._id}`}
+                  alt={activeBlock.alt}
+                  style={{
+                    width: "100%",
+                    maxHeight: 300,
+                    objectFit: "contain",
+                    borderRadius: 8
+                  }}
+                />
+              )
+            }
     
             <TextField label="Image URL" fullWidth value={activeBlock.src}
               onChange={(e) => setActiveBlock({ ...activeBlock, src: e.target.value, })}
